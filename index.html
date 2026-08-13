@@ -153,7 +153,7 @@
   <section class="hero">
     <span class="badge"><span class="dot"></span> Suporte online agora</span>
     <h1>Fale com a nossa equipe de suporte</h1>
-    <p>Tire suas duvidas, faca pedidos ou solicite atendimento pelo nosso chat. Respondemos de forma rapida e direta, sem complicacao.</p>
+    <p>Tire suas duvidas, solicite atendimento pelo nosso chat. Respondemos de forma rapida e direta, sem complicacão.</p>
     <a href="#" class="btn-primary" onclick="abrirChat(); return false;">
       &#128172; Iniciar conversa
     </a>
@@ -188,13 +188,15 @@
       payload: { startOpen: false }
     }
     document.getElementById('ano').textContent = new Date().getFullYear();
-    function abrirChat() {
-      if (window._digisac && typeof window._digisac.open === 'function') {
-        window._digisac.open();
-      } else {
-        var launcher = document.querySelector('[class*="digisac"], iframe[src*="digisac"]');
-        if (launcher) launcher.click();
+    function abrirChat(ev) {
+      if (ev) ev.preventDefault();
+      var f = document.querySelector('iframe.digisac-widget');
+      if (!f || !f.contentWindow) {
+        // widget ainda carregando: tenta de novo em instantes
+        return setTimeout(abrirChat, 400);
       }
+      window.toggleWidgets = true;
+      f.contentWindow.postMessage({ toggle: true }, "https://webchat.digisac.app");
     }
   </script>
   <script src="https://webchat.digisac.app/embedded.js"></script>
